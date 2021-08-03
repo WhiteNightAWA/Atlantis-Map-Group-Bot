@@ -13,18 +13,18 @@ async def reload(ctx):
         await ctx.message.delete()
         m = "```Start reloading...```"
         msg = await ctx.send(m)
-        for file in listdir("extension"):
+        for file in listdir("./cogs"):
             if file in ["commands", "events"]:
-                for fileName in listdir(f"extension/{file}"):
+                for fileName in listdir(f"./cogs/{file}"):
                     if not fileName.startswith("__"):
                         try:
-                            client.unload_extension(f"extension.{file}.{fileName[:-3]}")
+                            client.unload_extension(f"cogs.{file}.{fileName[:-3]}")
                             m = m[:-3] + f"\nStart reloading {fileName}...```"
                             await msg.edit(content=m)
                         except:
                             m = m[:-3] + f"\nStart loading {fileName}...```"
                             await msg.edit(content=m)
-                        client.load_extension(f"extension.{file}.{fileName[:-3]}")
+                        client.load_extension(f"cogs.{file}.{fileName[:-3]}")
                         await asyncio.sleep(1)
                         m = m[:-3] + f"Done```"
                         await msg.edit(content=m)
@@ -32,11 +32,11 @@ async def reload(ctx):
         await msg.edit(content=m)
 
 
-for file in listdir("extension"):
+for file in listdir("./cogs"):
     if file in ["commands", "events"]:
-        for fileName in listdir(f"extension/{file}"):
+        for fileName in listdir(f"./cogs/{file}"):
             if not fileName.startswith("__"):
-                client.load_extension(f"extension.{file}.{fileName[:-3]}")
+                client.load_extension(f"cogs.{file}.{fileName[:-3]}")
 
 if __name__ == "__main__":
     client.run(environ["token"])
