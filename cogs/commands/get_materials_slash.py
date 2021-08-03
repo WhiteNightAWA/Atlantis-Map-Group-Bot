@@ -1,17 +1,19 @@
 import asyncio
+
 from cogs.core import core
 from cogs.data import *
 from cogs.functions import create_new_data, get_all, check_more, get, put, put_all
-from discord.ext import commands
+from discord_slash import cog_ext, SlashContext
+from discord_slash.utils.manage_commands import create_option
 from math import ceil
 import discord
 import datetime
 
 
-class get_materials_command(core):
+class get_materials_slash(core):
 
-    @commands.command(name="開始申請材料")
-    async def 開始申請材料(self, ctx):
+    @cog_ext.cog_slash(name="開始申請材料", description="/開始申請材料")
+    async def _開始申請材料(self, ctx:SlashContext):
         if ctx.channel.id not in not_channel:
             data = await get_all()
             if str(ctx.channel.id) not in data["user"]:
@@ -35,8 +37,11 @@ class get_materials_command(core):
         else:
             pass
 
-    @commands.command(name="新增申請材料")
-    async def 新增申請材料(self, ctx, 材料: str, 數量: int):
+    @cog_ext.cog_slash(name="新增申請材料", description="/新增申請材料 [材料] [數量(單位：組)]  (申請同種方塊會蓋過上個申請的數量，數量為0可取消申請該方塊)", options=[
+        create_option(name="材料", description="材料", option_type=3, required=True),
+        create_option(name="數量(單位：組)", description="數量(單位：組)", option_type=4, required=True)
+    ])
+    async def _新增申請材料(self, ctx:SlashContext, 材料: str, 數量: int):
         if ctx.channel.id not in not_channel:
             data = await get_all()
             if str(ctx.channel.id) in data["user"]:
@@ -76,8 +81,8 @@ class get_materials_command(core):
         else:
             pass
 
-    @commands.command(name="查看目前申請材料")
-    async def 查看目前申請材料(self, ctx):
+    @cog_ext.cog_slash(name="查看目前申請材料", description="/查看目前申請材料")
+    async def _查看目前申請材料(self, ctx:SlashContext):
         if ctx.channel.id not in not_channel:
             data = await get_all()
             if str(ctx.channel.id) in data["user"]:
@@ -109,8 +114,8 @@ class get_materials_command(core):
         else:
             pass
 
-    @commands.command(name="查看目前申請材料")
-    async def 遞交申請(self, ctx):
+    @cog_ext.cog_slash(name="遞交申請", description="/遞交申請")
+    async def _遞交申請(self, ctx:SlashContext):
         if ctx.channel.id not in not_channel:
             all_data = await get_all()
             if str(ctx.channel.id) in all_data["user"]:
@@ -140,8 +145,8 @@ class get_materials_command(core):
                         await send_msg.delete()
                         return
                     if message.content == "確定":
-                        send_msg.delete()
-                        message.delete()
+                        await send_msg.delete()
+                        await message.delete()
                         data["edit"] = False
                         send_msg = await self.client.get_channel(865180618634821632).send(
                             embed=discord.Embed(title=f"`{data['user'][str(ctx.channel.id)]['name']}`遞交了申請：",
@@ -155,7 +160,7 @@ class get_materials_command(core):
                         res = await put(ctx.channel.id, data)
                         for emoji in ["✅", "❌", "💬", "#️⃣"]:
                             await send_msg.add_reaction(emoji)
-                        await ctx.sned(
+                        await ctx.send(
                             embed=discord.Embed(title="這個頻道的材料申請已經成功遞交", description="審核完成後會有通知，請耐心等待",
                                                 color=discord.Colour.green(),
                                                 timestamp=datetime.datetime.utcnow()).set_author(name=ctx.author,
@@ -180,8 +185,8 @@ class get_materials_command(core):
         else:
             pass
 
-    @commands.command(name="撤回遞交申請")
-    async def 撤回遞交申請(self, ctx):
+    @cog_ext.cog_slash(name="撤回遞交申請", description="/撤回遞交申請")
+    async def _撤回遞交申請(self, ctx:SlashContext):
         if ctx.channel.id not in not_channel:
             all_data = await get_all()
             if str(ctx.channel.id) in all_data["user"]:
@@ -243,4 +248,4 @@ class get_materials_command(core):
 
 
 def setup(client):
-    client.add_cog(get_materials_command(client))
+    client.add_cog(get_materials_slash(client))

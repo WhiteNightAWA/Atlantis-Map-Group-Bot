@@ -1,4 +1,5 @@
 import asyncio
+import keep_alive
 from discord.ext import commands
 from os import environ, listdir
 from discord_slash import SlashCommand
@@ -39,4 +40,5 @@ for file in listdir("./cogs"):
                 client.load_extension(f"cogs.{file}.{fileName[:-3]}")
 
 if __name__ == "__main__":
+    keep_alive.keep_alive()
     client.run(environ["token"])
