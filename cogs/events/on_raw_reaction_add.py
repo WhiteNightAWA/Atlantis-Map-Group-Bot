@@ -208,7 +208,7 @@ class on_raw_reaction_add(core):
                         user = await guild.fetch_member(all_data["channels"][str(payload.message_id)]["user"])
                         message = await guild.get_channel(858218055917109288).fetch_message(
                             all_data["channels"][str(payload.message_id)]["msg"])
-                        as_msg = await guild.get_channel.fetch_message(payload.message_id)
+                        as_msg = await guild.get_channel(865625754799833119).fetch_message(payload.message_id)
                         if str(payload.emoji) == "☑️":
                             await as_msg.remove_reactions()
                             overwrites = {
