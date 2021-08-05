@@ -220,7 +220,9 @@ class on_raw_reaction_add(core):
                                 user: discord.PermissionOverwrite(read_messages=True, send_messages=True,
                                                                   manage_permissions=True)}
                             channel = await guild.create_text_channel(
-                                str(all_data["channels"][str(payload.message_id)]["name"]), overwrites=overwrites)
+                                str(all_data["channels"][str(payload.message_id)]["name"]),
+                                overwrites=overwrites,
+                                category=guild.get_channel(858190816488063006))
                             await message.edit(
                                 embed=discord.Embed(title="頻道申請通過", description=f"處理人: <@!{payload.member.id}>",
                                                     color=discord.Colour.green()).set_author(name=user,

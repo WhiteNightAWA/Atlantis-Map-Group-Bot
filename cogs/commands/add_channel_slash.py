@@ -1,17 +1,15 @@
 import asyncio
+from discord_slash import cog_ext, SlashContext
 from cogs.core import core
-from cogs.data import *
-from cogs.functions import create_new_data, get_all, check_more, get, put, put_all
-from discord.ext import commands
-from math import ceil
+from cogs.functions import get_all, put_all
 import discord
 import datetime
 
 
-class add_channel(core):
+class add_channel_slash(core):
 
-    @commands.command()
-    async def 申請頻道(self, ctx, name: str):
+    @cog_ext.cog_slash(name="申請頻道")
+    async def _申請頻道(self, ctx: SlashContext, name: str):
         all_data = await get_all()
         if str(ctx.author.id) not in all_data["channels"]:
 
@@ -53,4 +51,4 @@ class add_channel(core):
 
 
 def setup(client):
-    client.add_cog(add_channel(client))
+    client.add_cog(add_channel_slash(client))
