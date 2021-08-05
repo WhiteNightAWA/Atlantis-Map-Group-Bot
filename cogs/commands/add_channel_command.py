@@ -13,7 +13,7 @@ class add_channel_command(core):
         all_data = await get_all()
         ok = True
         for c in all_data["channels"]:
-            if ctx.author.id == c["user"]:
+            if int(ctx.author.id) == int(all_data["channels"][str(c)]["user"]):
                 ok = False
         if ok:
 

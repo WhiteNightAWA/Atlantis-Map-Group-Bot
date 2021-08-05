@@ -237,8 +237,8 @@ class on_raw_reaction_add(core):
                                                                    color=discord.Colour.green()))
                             all_data["channels"][str(payload.message_id)]["stage"] = 1
                             await put_all(all_data)
-                        elif payload.emoji.name == "🇽":
-                            msg2 = await self.client.get_channel(865180618634821632).send("拒絕的原因:(輸入`-`取消)")
+                        elif str(payload.emoji) == "🇽":
+                            msg2 = await self.client.get_channel(payload.channel_id).send("拒絕的原因:(輸入`-`取消)")
                             reson = await self.client.wait_for("message",
                                                                check=lambda m: m.author.id == payload.member.id)
                             await msg2.delete()
