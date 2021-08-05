@@ -34,10 +34,10 @@ class add_channel(core):
                     embed=discord.Embed(title="申請成功", description="請等待管理員審核", color=discord.Colour.green(),
                                         timestamp=datetime.datetime.utcnow()).set_author(name=ctx.author,
                                                                                          icon_url=ctx.author.avatar_url))
-                all_data["channels"][str(ctx.author.id)] = {"name": name, "members": [], "stage": 0}
-                s = await ctx.get_channel(865625754799833119).send(
+                s = await self.client.get_channel(865625754799833119).send(
                     embed=discord.Embed(title=f"`{ctx.author}`申請`{name}`頻道!",
                                         description=f"負責人: <@!{ctx.author.id}>"))
+                all_data["channels"][str(s.id)] = {"name": name, "user": ctx.author.id, "members": [], "stage": 0, "msg": msg.id}
                 for emoji in ["☑️", "🇽"]:
                     await s.add_reaction(emoji)
                 await put_all(all_data)
