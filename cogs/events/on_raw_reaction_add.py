@@ -214,10 +214,10 @@ class on_raw_reaction_add(core):
                             overwrites = {
                                 guild.default_role: discord.PermissionOverwrite(read_messages=False),
                                 guild.get_role(858025513184264222): discord.PermissionOverwrite(read_messages=True,
-                                                                                                send_message=True),
+                                                                                                send_messages=True),
                                 guild.get_role(858026350715731968): discord.PermissionOverwrite(read_messages=True,
-                                                                                                send_message=True),
-                                user: discord.PermissionOverwrite(read_messages=True, send_message=True,
+                                                                                                send_messages=True),
+                                user: discord.PermissionOverwrite(read_messages=True, send_messages=True,
                                                                   manage_permissions=True)}
                             channel = await guild.create_text_channel(
                                 str(all_data["channels"][str(payload.message_id)]["name"]), overwrites=overwrites)
