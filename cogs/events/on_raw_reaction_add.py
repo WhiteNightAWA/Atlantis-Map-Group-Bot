@@ -210,7 +210,7 @@ class on_raw_reaction_add(core):
                             all_data["channels"][str(payload.message_id)]["msg"])
                         as_msg = await guild.get_channel(865625754799833119).fetch_message(payload.message_id)
                         if str(payload.emoji) == "☑️":
-                            await as_msg.remove_reactions()
+                            await as_msg.clear_reactions()
                             overwrites = {
                                 guild.default_role: discord.PermissionOverwrite(read_messages=False),
                                 guild.get_role(858025513184264222): discord.PermissionOverwrite(read_messages=True,
