@@ -156,8 +156,8 @@ class get_materials_slash(core):
                         all_data["data"][str(message.id)] = {"channel_id": ctx.channel.id, "stage": 1,
                                                              "user_id": ctx.author.id}
                         data["message_id"] = send_msg.id
+                        all_data["user"][str(ctx.channel.id)] = data
                         res = await put_all(all_data)
-                        res = await put(ctx.channel.id, data)
                         for emoji in ["✅", "❌", "💬", "#️⃣"]:
                             await send_msg.add_reaction(emoji)
                         await ctx.send(
@@ -222,8 +222,8 @@ class get_materials_slash(core):
                         data["data"].pop(str(send_mg.id), None)
                         data.pop("message_id", None)
                         all_data["wait"].append(message.id)
+                        all_data["user"][str(ctx.channel.id)] = data
                         res = await put_all(all_data)
-                        res = await put(ctx.channel.id, data)
                         await ctx.send(
                             embed=discord.Embed(title="這個頻道的材料申請已經成功撤回", description="", color=discord.Colour.green(),
                                                 timestamp=datetime.datetime.utcnow()).set_author(name=ctx.author,

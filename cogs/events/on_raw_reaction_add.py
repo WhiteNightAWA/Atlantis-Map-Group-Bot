@@ -58,7 +58,49 @@ class on_raw_reaction_add(core):
                         send_msg = await self.client.get_channel(865180618634821632).send(
                             "輸入訊息: (輸入`-`取消註記，輸入`.`刪除原有註記，新的註記會覆蓋舊有的)")
 
-                        # continue tomorrow
+                        if "note" in all_data["data"][str(payload.message_id)]:
+                            text = all_data["data"][str(payload.message_id)]["note"]
+                            msg1 = await self.client.get_channel(865180618634821632).send(
+                                embed=discord.Embed(title="上次註記：", description=f"```{text}```", color=0xfffff9))
+
+                        get_message = await self.client.wait_for("message", check=lambda m: m.author.id == payload.member.id)
+
+                        if get_message.content == "-":
+                            await send_msg.delete()
+                            await get_message.delete()
+                            if "note" in all_data["data"][str(payload.message_id)]:
+                                await msg1.delete()
+                            await message.remove_reaction("#️⃣", payload.member)
+                        elif get_message.content == ".":
+                            await send_msg.delete()
+                            await get_message.delete()
+                            if "note" in all_data["data"][str(payload.message_id)]:
+                                await msg1.delete()
+                            embed = message.embeds[0]
+                            if embed.fields[1].name == "註記：":
+                                embed.remove_field(1)
+                            all_data["data"][str(payload.message_id)].pop("note", None)
+                            await put_all(all_data)
+                            await message.edit(embed=embed)
+                            await message.remove_reaction("#️⃣", payload.member)
+                        else:
+                            await send_msg.delete()
+                            await get_message.delete()
+                            if "note" in all_data["data"][str(payload.message_id)]:
+                                await msg1.delete()
+                            all_data["data"][str(payload.message_id)]["note"] = str(get_message.content)
+                            embed = discord.Embed(title="",
+                                                  description=f"<@!{payload.user_id}>:\n```\n{get_message.content}\n```",
+                                                  color=0xfffff9, timestamp=datetime.datetime.utcnow())
+
+                            embed = message.embeds[0]
+                            if embed.fields[1].name == "註記：":
+                                embed.remove_field(1)
+                            embed.add_field(name="註記：", value=f"```\n{get_message.content}\n```", inline=False)
+                            await put_all(all_data)
+                            await message.edit(embed=embed)
+                            await message.remove_reaction("#️⃣", payload.member)
+
 
                 if str(payload.message_id) in all_data["data"]:
                     if all_data["data"][str(payload.message_id)]["stage"] == 1:
