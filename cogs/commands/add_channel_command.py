@@ -11,7 +11,11 @@ class add_channel_command(core):
     @commands.command()
     async def 申請頻道(self, ctx, name: str):
         all_data = await get_all()
-        if str(ctx.author.id) not in all_data["channels"]:
+        ok = True
+        for c in all_data["channels"]:
+            if ctx.author.id == c["user"]:
+                ok = False
+        if ok:
 
             msg = await ctx.send(embed=discord.Embed(
                 title="確定申請頻道？", description=f"負責人: <@!{ctx.author.id}>").add_field(
